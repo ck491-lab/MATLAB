@@ -1,14 +1,21 @@
-%% written by Emma Holt 3/14/19
+%% written by Emma Holt 3/14/19; continuously edited
 %you need to convert the text file that you got from reducing into a normal
     %excel format
 %you need to make sure you have all of your treatment, etc columns filled
     %out
-%% import excel sheet into matlab
-
-%path is folder where your excel data sheet is
+%% converting reduced file to normal excel file
+%rawpath is the folder where you have the raw reduced file that needs to be converted
+rawpath='Y:\Eric and Sarah\Behavior\Developmental Tianeptine Study\Dev FLX Adult TIA Crossover Study (DAALTO)\Behavioral Data\Open Field\Extracted from program';
+RawFile=[rawpath,'\','postFLX_10min_stdcenter']; %name of your raw file that you want to convert file
+%path is the folder in which you want to save your converted file (could be the same folder)
 path='Y:\Eric and Sarah\Behavior\Developmental Tianeptine Study\Dev FLX Adult TIA Crossover Study (DAALTO)\Behavioral Data\Open Field\Post FLX treatment';
+convertedfilename=[path,'\','playingaround.xlsx']; %name of your converted excel file
+[convertedfilename]=ConvertReducedOFfile(RawFile,convertedfilename)%function will convert raw file to normal excel file
+%% import excel sheet into matlab
+%path is folder where your excel data sheet will be saved
 cd(path)
-filename=[path,'\','postFLX_10min_stdcenter.xlsx']; %name of your excel file
+filename=convertedfilename; %USE THIS LINE IF YOU USED ABOVE CODE TO CONVERT THE RAW FILE
+% filename=[path,'\','postFLX_10min_stdcenter.xlsx']; %name of your converted excel file - USE THIS LINE IF YOU DIDN'T USE ABOVE CODE TO CONVERT
 [DataFile]=openfield_dataextract(filename) %function will extract from excel and put into Matlab table
 numbins=6; %the number of bins will vary based on the length of the intervals
 % DataFile=prepostFLXcombined;
@@ -41,29 +48,29 @@ whichbox10=ismember(DataFile.Encl,10);
 for x=1:numbins
     bin=find((DataFile.Interval)==x);
     for n=1:length(bin)
-        if whichmales(bin(n,1),1)==1 & whichPNFLX(bin(n,1),1)==1
-            malesPNFLX_bins(n,x)=bin(n,1);
-        else
-            malesPNFLX_bins(n,x)=NaN;
-        end
-        
-        if whichmales(bin(n,1),1)==1 & whichPNVEH(bin(n,1),1)==1 
-            malesPNVEH_bins(n,x)=bin(n,1);
-        else
-            malesPNVEH_bins(n,x)=NaN;
-        end
-        
-        if whichfemales(bin(n,1),1)==1 & whichPNFLX(bin(n,1),1)==1 
-            femalesPNFLX_bins(n,x)=bin(n,1);
-        else
-            femalesPNFLX_bins(n,x)=NaN;
-        end
-        
-        if whichfemales(bin(n,1),1)==1 & whichPNVEH(bin(n,1),1)==1 
-            femalesPNVEH_bins(n,x)=bin(n,1);
-        else
-            femalesPNVEH_bins(n,x)=NaN;
-        end 
+%         if whichmales(bin(n,1),1)==1 & whichPNFLX(bin(n,1),1)==1
+%             malesPNFLX_bins(n,x)=bin(n,1);
+%         else
+%             malesPNFLX_bins(n,x)=NaN;
+%         end
+%         
+%         if whichmales(bin(n,1),1)==1 & whichPNVEH(bin(n,1),1)==1 
+%             malesPNVEH_bins(n,x)=bin(n,1);
+%         else
+%             malesPNVEH_bins(n,x)=NaN;
+%         end
+%         
+%         if whichfemales(bin(n,1),1)==1 & whichPNFLX(bin(n,1),1)==1 
+%             femalesPNFLX_bins(n,x)=bin(n,1);
+%         else
+%             femalesPNFLX_bins(n,x)=NaN;
+%         end
+%         
+%         if whichfemales(bin(n,1),1)==1 & whichPNVEH(bin(n,1),1)==1 
+%             femalesPNVEH_bins(n,x)=bin(n,1);
+%         else
+%             femalesPNVEH_bins(n,x)=NaN;
+%         end 
         
         if whichmales(bin(n,1),1)==1 & whichPNFLX(bin(n,1),1)==1 & whichadultFLX(bin(n,1),1)==1
             malesFLXFLX_bins(n,x)=bin(n,1);
@@ -116,21 +123,21 @@ for x=1:numbins
 end
 % remove NaNs
 
-    remove=isnan(malesPNFLX_bins(:,x));
-    malesPNFLX_bins(remove,:)=[];
-    clear remove
-    
-    remove=isnan(malesPNVEH_bins(:,x));
-    malesPNVEH_bins(remove,:)=[];
-    clear remove
-    
-    remove=isnan(femalesPNFLX_bins(:,x));
-    femalesPNFLX_bins(remove,:)=[];
-    clear remove
-    
-    remove=isnan(femalesPNVEH_bins(:,x));
-    femalesPNVEH_bins(remove,:)=[];
-    clear remove
+%     remove=isnan(malesPNFLX_bins(:,x));
+%     malesPNFLX_bins(remove,:)=[];
+%     clear remove
+%     
+%     remove=isnan(malesPNVEH_bins(:,x));
+%     malesPNVEH_bins(remove,:)=[];
+%     clear remove
+%     
+%     remove=isnan(femalesPNFLX_bins(:,x));
+%     femalesPNFLX_bins(remove,:)=[];
+%     clear remove
+%     
+%     remove=isnan(femalesPNVEH_bins(:,x));
+%     femalesPNVEH_bins(remove,:)=[];
+%     clear remove
     
     remove=isnan(malesFLXFLX_bins(:,x));
     malesFLXFLX_bins(remove,:)=[];
@@ -420,5 +427,5 @@ clear a ans filename n numbins x y malesPNFLX_bins malesPNVEH_bins femalesPNFLX_
     femalesFLXVEH_bins femalesVEHFLX_bins femalesVEHVEH_bins malesFLXFLX_bins malesFLXVEH_bins malesVEHFLX_bins malesVEHVEH_bins...
     box1_bins box2_bins box3_bins box4_bins box5_bins box6_bins box7_bins box8_bins box9_bins box10_bins
 
-% savepath='Y:\Eric and Sarah\Behavior\Developmental Tianeptine Study\Dev FLX Adult TIA Crossover Study (DAALTO)\Behavioral Data\Open Field\Post FLX treatment'; %change the savepath if you want to save in a different folder
-% save([savepath,'\','DAALTO_pre_postFLXcomp_10min_stdcenter.mat'])
+savepath='Y:\Eric and Sarah\Behavior\Developmental Tianeptine Study\Dev FLX Adult TIA Crossover Study (DAALTO)\Behavioral Data\Open Field\Post FLX treatment'; %change the savepath if you want to save in a different folder
+save([savepath,'\','playingaround.mat'])
